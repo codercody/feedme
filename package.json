@@ -10,11 +10,16 @@
   },
   "dependencies": {
     "@farcaster/auth-kit": "^0.2.1",
+    "@prisma/client": "^5.9.1",
+    "apexcharts": "^3.46.0",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.7.2",
     "next": "14.1.0",
+    "prisma": "^5.9.1",
     "react": "^18",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^18",
+    "swr": "^2.2.5",
     "viem": "^2.7.9"
   },
   "devDependencies": {
