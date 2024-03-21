@@ -1,8 +1,4 @@
-"use client";
-
-import { useState } from "react";
 import { Avatar, Button, Card } from "flowbite-react";
-import Link from "next/link";
 import {
   HiOutlineChatBubbleLeft,
   HiArrowPath,
@@ -10,51 +6,34 @@ import {
   HiHeart,
 } from "react-icons/hi2";
 import { PostT } from "@/lib/types/post";
+import { useTimeline } from "@/lib/contexts/timeline";
+
+const timeDeltaToString = (a: Date, b: Date) => {
+  let diffMs = new Date(b).getTime() - new Date(a).getTime();
+  if (diffMs < 1000) return "now";
+  else if (diffMs < 60 * 1000) return `${Math.floor(diffMs / 1000)}s`;
+  else if (diffMs < 60 * 60 * 1000)
+    return `${Math.floor(diffMs / (60 * 1000))}m`;
+  else if (diffMs < 24 * 60 * 60 * 1000)
+    return `${Math.floor(diffMs / (60 * 60 * 1000))}h`;
+  else if (diffMs < 30 * 24 * 60 * 60 * 1000)
+    return `${Math.floor(diffMs / (24 * 60 * 60 * 1000))}d`;
+  else if (diffMs < 12 * 30 * 24 * 60 * 60 * 1000)
+    return `${Math.floor(diffMs / (30 * 24 * 60 * 60 * 1000))}mo`;
+  else return `${Math.floor(diffMs / (365 * 24 * 60 * 60 * 1000))}y`;
+};
 
 export default function Post({
-  post: {
-    author,
-    id,
-    body,
-    comments: initialComments,
-    shared: initialShared,
-    shares: initialShares,
-    liked: initialLiked,
-    likes: initialLikes,
-  },
+  post: { id, author, body, comments, shared, shares, liked, likes, timestamp },
 }: {
   post: PostT;
 }) {
-  const [comments, setComments] = useState(initialComments);
-  const [shared, setShared] = useState(initialShared);
-  const [shares, setShares] = useState(initialShares);
-  const [liked, setLiked] = useState(initialLiked);
-  const [likes, setLikes] = useState(initialLikes);
-
-  const toggleShared = () => {
-    if (shared) {
-      setShared(false);
-      setShares(shares - 1);
-    } else {
-      setShared(true);
-      setShares(shares + 1);
-    }
-  };
-
-  const toggleLiked = () => {
-    if (liked) {
-      setLiked(false);
-      setLikes(likes - 1);
-    } else {
-      setLiked(true);
-      setLikes(likes + 1);
-    }
-  };
+  const { timelineCursor, setTimelineCursor } = useTimeline();
 
   return (
-    <Card className="max-w mb-4" href={`/${author}/${id}`}>
+    <Card className="max-w mb-4" href={`/${author.fid}/${id}`}>
       <Avatar
-        img="https://res.cloudinary.com/merkle-manufactory/image/fetch/c_fill,f_jpg,w_144/https%3A%2F%2Fi.imgur.com%2FIzJxuId.jpg"
+        img={author.pfp}
         rounded
         theme={{
           root: { base: "flex items-center space-x-4 rounded" },
@@ -62,13 +41,19 @@ export default function Post({
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          alert("&hai&");
         }}
       >
         <div className="space-y-1 dark:text-white">
-          <span className="font-bold hover:underline">Vitalik Buterin</span>{" "}
-          <span className="hover:underline">@vitalik.eth</span> ·{" "}
-          <span className="hover:underline">23h</span>
+          <span className="font-bold hover:underline">
+            {author.name || `fid: ${author.fid}`}
+          </span>{" "}
+          {author.fname && (
+            <span className="hover:underline">@{author.fname}</span>
+          )}{" "}
+          ·{" "}
+          <span className="hover:underline">
+            {timeDeltaToString(timestamp, timelineCursor)}
+          </span>
         </div>
       </Avatar>
       <p className="font-normal text-gray-700 dark:text-gray-400">{body}</p>
@@ -77,12 +62,12 @@ export default function Post({
           color="gray"
           className="enabled:hover:text-blue-500"
           onClick={(e) => {
-            e.preventDefault();
             e.stopPropagation();
           }}
+          href={`/${author.fid}/${id}`}
         >
           <HiOutlineChatBubbleLeft className="mr-3 h-4 w-4" />
-          {comments}
+          {comments.toString()}
         </Button>
         <Button
           color={shared ? "gray-solid" : "gray"}
@@ -96,11 +81,11 @@ export default function Post({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            toggleShared();
           }}
+          disabled
         >
           <HiArrowPath className="mr-3 h-4 w-4" />
-          {shares}
+          {shares.toString()}
         </Button>
         <Button
           color={liked ? "gray-solid" : "gray"}
@@ -114,15 +99,15 @@ export default function Post({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            toggleLiked();
           }}
+          disabled
         >
           {liked ? (
             <HiHeart className="mr-3 h-4 w-4" />
           ) : (
             <HiOutlineHeart className="mr-3 h-4 w-4" />
           )}
-          {likes}
+          {likes.toString()}
         </Button>
       </div>
     </Card>

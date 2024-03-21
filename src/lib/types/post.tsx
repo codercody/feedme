@@ -1,10 +1,16 @@
 export type PostT = {
-  author: string;
   id: string;
+  author: {
+    fid: string;
+    fname: string | undefined;
+    name: string | undefined;
+    pfp: string | undefined;
+  };
+  timestamp: Date;
   body: string;
-  comments: number;
+  comments: Number;
   shared: boolean;
-  shares: number;
+  shares: Number;
   liked: boolean;
-  likes: number;
+  likes: Number;
 };

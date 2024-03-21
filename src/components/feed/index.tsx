@@ -1,33 +1,61 @@
 "use client";
 
 import Post from "@/components/post";
-import { Spinner } from "flowbite-react";
-import { PostT } from "@/lib/types/post";
-import { Fetcher } from "swr";
-import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
+import { Button, Spinner } from "flowbite-react";
+import useSWRInfinite from "swr/infinite";
 import { RecommenderT } from "@/lib/types/recommender";
+import { useTimeline } from "@/lib/contexts/timeline";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const PAGE_SIZE = 10;
 
 export default function Feed({
   recommender,
-  getKey,
-  fetcher,
+  apiEndpoint,
+  options = "",
 }: {
   recommender: RecommenderT;
-  getKey: SWRInfiniteKeyLoader;
-  fetcher: Fetcher<PostT[], string>;
+  apiEndpoint: string;
+  options: string;
 }) {
-  const { isLoading, error, data: posts } = useSWRInfinite(getKey, fetcher);
+  const { timelineCursor, setTimelineCursor } = useTimeline();
+
+  const { isLoading, error, size, setSize, data } = useSWRInfinite(
+    (index) =>
+      `/api/recommenders/${
+        recommender.id
+      }/${apiEndpoint}?per_page=${PAGE_SIZE}&page=${
+        index + 1
+      }&cursor=${timelineCursor.toISOString()}${options}`,
+    fetcher
+  );
+
+  const posts = data ? [].concat(...data) : [];
+  const isLoadingMore =
+    isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
+  const isEmpty = data?.[0]?.length === 0;
+  const isReachingEnd =
+    isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
   return (
     <div>
-      {isLoading ? (
-        <Spinner />
-      ) : error ? (
-        <p className="text-red-500">Error loading feed.</p>
-      ) : posts && posts.length > 0 ? (
-        posts.map((post, index) => <Post key={index} post={post} />)
+      {error ? (
+        <p className="text-red-500 mb-4">Error loading feed.</p>
       ) : (
-        <p>{recommender.name} No posts found.</p>
+        <>
+          {posts.map((post, index) => (
+            <Post key={index} post={post} />
+          ))}
+          {isLoadingMore && <Spinner className="mx-auto mb-4 block" />}
+          {isEmpty && <p className="mb-4">No posts found.</p>}
+          <Button
+            className="mx-auto mb-4"
+            disabled={isLoadingMore || isReachingEnd}
+            onClick={() => setSize(size + 1)}
+          >
+            Load more...
+          </Button>
+        </>
       )}
     </div>
   );
