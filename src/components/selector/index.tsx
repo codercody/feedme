@@ -1,8 +1,7 @@
 "use client";
 
 import { Select, Label } from "flowbite-react";
-import { recommenders } from "@/lib/recommenders";
-import { RecommenderT } from "@/lib/types/recommender";
+import { recommenders, RecommenderT } from "@/lib/recommenders";
 
 export default function Selector({
   recommender,

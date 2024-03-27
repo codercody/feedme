@@ -3,11 +3,11 @@
 import Post from "@/components/post";
 import { Button, Spinner } from "flowbite-react";
 import useSWRInfinite from "swr/infinite";
-import { RecommenderT } from "@/lib/types/recommender";
+import { RecommenderT } from "@/lib/recommenders";
 import { useTimeline } from "@/lib/contexts/timeline";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 export default function Feed({
   recommender,

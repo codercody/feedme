@@ -13,4 +13,5 @@ export type PostT = {
   shares: Number;
   liked: boolean;
   likes: Number;
+  relevance: Number;
 };

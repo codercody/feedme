@@ -1,6 +1,6 @@
 import NotSupported from "@/components/alerts/not-supported";
 
-export default function Diversity() {
+export default function Robustness() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-2">Robustness and stability</h1>

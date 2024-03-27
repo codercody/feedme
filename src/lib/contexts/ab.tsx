@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
-import { RecommenderT } from "../types/recommender";
-import { recommenders } from "../recommenders";
+import { recommenders, getRecommender, RecommenderT } from "@/lib/recommenders";
 
 type ABState = {
   recommenders: RecommenderT[];
@@ -38,15 +37,11 @@ export function ABProvider({
   }, [bID]);
 
   const a = useMemo(
-    () =>
-      recommenders.find((recommender) => recommender.id === aID) ||
-      recommenders[0],
+    () => (aID && getRecommender(aID)) || recommenders[0],
     [aID]
   );
   const b = useMemo(
-    () =>
-      recommenders.find((recommender) => recommender.id === bID) ||
-      recommenders[1],
+    () => (bID && getRecommender(bID)) || recommenders[1],
     [bID]
   );
 

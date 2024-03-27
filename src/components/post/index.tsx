@@ -7,6 +7,7 @@ import {
 } from "react-icons/hi2";
 import { PostT } from "@/lib/types/post";
 import { useTimeline } from "@/lib/contexts/timeline";
+import Link from "next/link";
 
 const timeDeltaToString = (a: Date, b: Date) => {
   let diffMs = new Date(b).getTime() - new Date(a).getTime();
@@ -24,7 +25,18 @@ const timeDeltaToString = (a: Date, b: Date) => {
 };
 
 export default function Post({
-  post: { id, author, body, comments, shared, shares, liked, likes, timestamp },
+  post: {
+    id,
+    author,
+    body,
+    comments,
+    shared,
+    shares,
+    liked,
+    likes,
+    timestamp,
+    relevance,
+  },
 }: {
   post: PostT;
 }) {
@@ -32,30 +44,33 @@ export default function Post({
 
   return (
     <Card className="max-w mb-4" href={`/${author.fid}/${id}`}>
-      <Avatar
-        img={author.pfp}
-        rounded
-        theme={{
-          root: { base: "flex items-center space-x-4 rounded" },
-        }}
+      <Link
         onClick={(e) => {
-          e.preventDefault();
           e.stopPropagation();
         }}
+        href={`/${author.fid}`}
       >
-        <div className="space-y-1 dark:text-white">
-          <span className="font-bold hover:underline">
-            {author.name || `fid: ${author.fid}`}
-          </span>{" "}
-          {author.fname && (
-            <span className="hover:underline">@{author.fname}</span>
-          )}{" "}
-          ·{" "}
-          <span className="hover:underline">
-            {timeDeltaToString(timestamp, timelineCursor)}
-          </span>
-        </div>
-      </Avatar>
+        <Avatar
+          img={author.pfp}
+          rounded
+          theme={{
+            root: { base: "flex items-center space-x-4 rounded" },
+          }}
+        >
+          <div className="space-y-1 dark:text-white">
+            <span className="font-bold hover:underline">
+              {author.name || `fid: ${author.fid}`}
+            </span>{" "}
+            {author.fname && (
+              <span className="hover:underline">@{author.fname}</span>
+            )}{" "}
+            ·{" "}
+            <span className="hover:underline">
+              {timeDeltaToString(timestamp, timelineCursor)}
+            </span>
+          </div>
+        </Avatar>
+      </Link>
       <p className="font-normal text-gray-700 dark:text-gray-400">{body}</p>
       <div className="flex flex-wrap gap-2">
         <Button
@@ -109,6 +124,11 @@ export default function Post({
           )}
           {likes.toString()}
         </Button>
+        <div className="flex-1 relative">
+          <p className="italic text-sm text-red-500 bottom-0 right-0 absolute">
+            Relevance: {relevance.toFixed(4)}
+          </p>
+        </div>
       </div>
     </Card>
   );
