@@ -11,8 +11,8 @@ async function getHome(options: Partial<GetPostsOptions> = {}) {
     FROM casts
     LEFT JOIN reactions ON casts.hash = reactions.target_hash AND reactions.reaction_type = 1
     WHERE
-      casts.timestamp <= ${cursor}::timestamp AND
-      casts.timestamp >= ${new Date(
+      casts.created_at <= ${cursor}::timestamp AND
+      casts.created_at >= ${new Date(
         cursor.getTime() - 1000 * 60 * 60 * 24
       )}::timestamp AND
       casts.deleted_at IS null AND
@@ -50,7 +50,7 @@ async function getPost(
     FROM casts
     LEFT JOIN reactions ON casts.hash = reactions.target_hash AND reactions.reaction_type = 1
     WHERE
-      casts.timestamp <= ${cursor}::timestamp AND
+      casts.created_at <= ${cursor}::timestamp AND
       casts.deleted_at IS null AND
       casts.parent_hash = ${root.hash}
     GROUP BY casts.id
@@ -78,7 +78,7 @@ async function getProfile(
     FROM casts
     LEFT JOIN reactions ON casts.hash = reactions.target_hash AND reactions.reaction_type = 1
     WHERE
-      casts.timestamp <= ${cursor}::timestamp AND
+      casts.created_at <= ${cursor}::timestamp AND
       casts.deleted_at IS null AND
       casts.fid = ${authorFid}
     GROUP BY casts.id

@@ -2,7 +2,7 @@
 
 import { type NextRequest } from "next/server";
 import { getRecommender } from "@/lib/recommenders";
-import computeRecall from "@/lib/evaluation/recall";
+import { computeRecall } from "@/lib/evaluation";
 
 export async function GET(
   req: NextRequest,

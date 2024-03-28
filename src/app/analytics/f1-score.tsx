@@ -23,22 +23,28 @@ export default function F1Score() {
       fetch(`/api/recommenders/${a.id}/f1-score`)
         .then((res) => res.json())
         .then((res) => setLeftPct(Math.round(1000000 * res) / 10000));
+
+    setLeftPct(null);
+    computeLeft();
+  }, [a]);
+
+  useEffect(() => {
     const computeRight = async () =>
       fetch(`/api/recommenders/${b.id}/f1-score`)
         .then((res) => res.json())
         .then((res) => setRightPct(Math.round(1000000 * res) / 10000));
 
-    computeLeft();
+    setRightPct(null);
     computeRight();
-  }, []);
+  }, [b]);
 
   return (
     <div>
       <h1 className="text-xl font-bold mb-2">F1 score</h1>
-      <p>This measures how much time and resources the algorithm takes.</p>
+      <p>This is a score that combines precision and recall.</p>
       <div className="flex flex-wrap">
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {left ? (
+          {left && typeof window !== "undefined" ? (
             <div className="flex justify-center">
               <Chart
                 options={left.options}
@@ -52,7 +58,7 @@ export default function F1Score() {
           )}
         </div>
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {right ? (
+          {right && typeof window !== "undefined" ? (
             <div className="flex justify-center">
               <Chart
                 options={right.options}

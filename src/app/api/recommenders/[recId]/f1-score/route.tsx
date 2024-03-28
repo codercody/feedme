@@ -2,7 +2,7 @@
 
 import { type NextRequest } from "next/server";
 import { getRecommender } from "@/lib/recommenders";
-import computeF1Score from "@/lib/evaluation/f1-score";
+import { computeF1Score } from "@/lib/evaluation";
 
 export async function GET(
   req: NextRequest,

@@ -7,7 +7,7 @@ async function getHome(options: Partial<GetPostsOptions> = {}) {
 
   const casts = await prisma.casts.findMany({
     where: {
-      timestamp: {
+      created_at: {
         lte: cursor,
       },
       deleted_at: null,
@@ -15,7 +15,7 @@ async function getHome(options: Partial<GetPostsOptions> = {}) {
     take: perPage,
     skip: (page - 1) * perPage,
     orderBy: {
-      timestamp: "desc",
+      created_at: "desc",
     },
   });
 
@@ -42,7 +42,7 @@ async function getPost(
   const casts = await prisma.casts.findMany({
     where: {
       parent_hash: root?.hash,
-      timestamp: {
+      created_at: {
         lte: cursor,
       },
       deleted_at: null,
@@ -50,7 +50,7 @@ async function getPost(
     take: perPage,
     skip: (page - 1) * perPage,
     orderBy: {
-      timestamp: "desc",
+      created_at: "desc",
     },
   });
 
@@ -69,7 +69,7 @@ async function getProfile(
   const casts = await prisma.casts.findMany({
     where: {
       fid: authorFid,
-      timestamp: {
+      created_at: {
         lte: cursor,
       },
       deleted_at: null,
@@ -77,7 +77,7 @@ async function getProfile(
     take: perPage,
     skip: (page - 1) * perPage,
     orderBy: {
-      timestamp: "desc",
+      created_at: "desc",
     },
   });
 

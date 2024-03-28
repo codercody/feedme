@@ -23,22 +23,30 @@ export default function Precision() {
       fetch(`/api/recommenders/${a.id}/precision`)
         .then((res) => res.json())
         .then((res) => setLeftPct(Math.round(1000000 * res) / 10000));
+
+    setLeftPct(null);
+    computeLeft();
+  }, [a]);
+
+  useEffect(() => {
     const computeRight = async () =>
       fetch(`/api/recommenders/${b.id}/precision`)
         .then((res) => res.json())
         .then((res) => setRightPct(Math.round(1000000 * res) / 10000));
 
-    computeLeft();
+    setRightPct(null);
     computeRight();
-  }, []);
+  }, [b]);
 
   return (
     <div>
       <h1 className="text-xl font-bold mb-2">Precision</h1>
-      <p>This measures how much time and resources the algorithm takes.</p>
+      <p>
+        This measures what percentage of recommended posts are truly relevant.
+      </p>
       <div className="flex flex-wrap">
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {left ? (
+          {left && typeof window !== "undefined" ? (
             <div className="flex justify-center">
               <Chart
                 options={left.options}
@@ -52,7 +60,7 @@ export default function Precision() {
           )}
         </div>
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {right ? (
+          {right && typeof window !== "undefined" ? (
             <div className="flex justify-center">
               <Chart
                 options={right.options}

@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { PostT } from "@/lib/types/post";
 import { casts } from "@prisma/client";
 
-async function getAuthor(fid: BigInt) {
+async function getAuthor(fid: bigint) {
   const profile = await prisma.user_data.findMany({ where: { fid } });
 
   const profileMap = new Map(profile.map((item) => [item.type, item.value]));
@@ -20,7 +20,7 @@ async function getAuthor(fid: BigInt) {
 const getComments = async (hash: Buffer) =>
   prisma.casts.count({ where: { parent_hash: hash, deleted_at: null } });
 
-const getShared = async (hash: Buffer, fid: BigInt) =>
+const getShared = async (hash: Buffer, fid: bigint) =>
   prisma.reactions.count({
     where: { target_hash: hash, deleted_at: null, reaction_type: 2, fid },
   });
@@ -30,7 +30,7 @@ const getShares = async (hash: Buffer) =>
     where: { target_hash: hash, deleted_at: null, reaction_type: 2 },
   });
 
-const getLiked = async (hash: Buffer, fid: BigInt) =>
+const getLiked = async (hash: Buffer, fid: bigint) =>
   prisma.reactions.count({
     where: { target_hash: hash, deleted_at: null, reaction_type: 1, fid },
   });
@@ -40,7 +40,7 @@ const getLikes = async (hash: Buffer) =>
     where: { target_hash: hash, deleted_at: null, reaction_type: 1 },
   });
 
-async function getRelevance(fid: BigInt, likes: int) {
+async function getRelevance(fid: bigint, likes: number) {
   const followers = await prisma.links.count({
     where: { deleted_at: null, target_fid: fid },
   });
@@ -50,7 +50,7 @@ async function getRelevance(fid: BigInt, likes: int) {
 
 export default async function getCast(
   cast: casts,
-  userFid: BigInt | undefined
+  userFid: bigint | undefined
 ): Promise<PostT> {
   const author = await getAuthor(cast.fid);
   const comments = await getComments(cast.hash);
