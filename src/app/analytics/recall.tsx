@@ -11,11 +11,11 @@ export default function Recall() {
   const [rightPct, setRightPct] = useState<number | null>(null);
   const left = useMemo(
     () => leftPct && getRadialBarState(a.name, leftPct),
-    [leftPct]
+    [leftPct, a.name]
   );
   const right = useMemo(
     () => rightPct && getRadialBarState(b.name, rightPct),
-    [rightPct]
+    [rightPct, b.name]
   );
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Recall() {
 
     setLeftPct(null);
     computeLeft();
-  }, [a]);
+  }, [a.id]);
 
   useEffect(() => {
     const computeRight = async () =>
@@ -36,7 +36,7 @@ export default function Recall() {
 
     setRightPct(null);
     computeRight();
-  }, [b]);
+  }, [b.id]);
 
   return (
     <div>
