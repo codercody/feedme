@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import Chart from "react-apexcharts";
 import { getRadialBarState } from "./charts";
 import { useAB } from "@/lib/contexts/ab";
 import { Spinner } from "flowbite-react";
@@ -38,13 +37,19 @@ export default function F1Score() {
     computeRight();
   }, [b.id]);
 
+  const [Chart, setChart] = useState<any>();
+
+  useEffect(() => {
+    import("react-apexcharts").then((mod) => setChart(() => mod.default));
+  }, []);
+
   return (
     <div>
       <h1 className="text-xl font-bold mb-2">F1 score</h1>
       <p>This is a score that combines precision and recall.</p>
       <div className="flex flex-wrap">
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {left && typeof window !== "undefined" ? (
+          {left && typeof window !== "undefined" && Chart ? (
             <div className="flex justify-center">
               <Chart
                 options={left.options}
@@ -58,7 +63,7 @@ export default function F1Score() {
           )}
         </div>
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {right && typeof window !== "undefined" ? (
+          {right && typeof window !== "undefined" && Chart ? (
             <div className="flex justify-center">
               <Chart
                 options={right.options}

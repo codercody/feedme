@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import Chart from "react-apexcharts";
 import { getRadialBarState } from "./charts";
 import { useAB } from "@/lib/contexts/ab";
 import { Spinner } from "flowbite-react";
@@ -38,6 +37,12 @@ export default function Recall() {
     computeRight();
   }, [b.id]);
 
+  const [Chart, setChart] = useState<any>();
+
+  useEffect(() => {
+    import("react-apexcharts").then((mod) => setChart(() => mod.default));
+  }, []);
+
   return (
     <div>
       <h1 className="text-xl font-bold mb-2">Recall</h1>
@@ -46,13 +51,13 @@ export default function Recall() {
       </p>
       <div className="flex flex-wrap">
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {left && typeof window !== "undefined" ? (
+          {left && typeof window !== "undefined" && Chart ? (
             <div className="flex justify-center">
               <Chart
                 options={left.options}
                 series={left.series}
                 type="radialBar"
-                width="500"
+                width={500}
               />
             </div>
           ) : (
@@ -60,13 +65,13 @@ export default function Recall() {
           )}
         </div>
         <div className="flex-1 text-center p-4" style={{ minWidth: 500 }}>
-          {right && typeof window !== "undefined" ? (
+          {right && typeof window !== "undefined" && Chart ? (
             <div className="flex justify-center">
               <Chart
                 options={right.options}
                 series={right.series}
                 type="radialBar"
-                width="500"
+                width={500}
               />
             </div>
           ) : (
