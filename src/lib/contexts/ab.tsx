@@ -31,10 +31,10 @@ export function ABProvider({
 
   useEffect(() => {
     if (aID) setACookie(aID);
-  }, [aID]);
+  }, [aID, setACookie]);
   useEffect(() => {
     if (bID) setBCookie(bID);
-  }, [bID]);
+  }, [bID, setBCookie]);
 
   const a = useMemo(
     () => (aID && getRecommender(aID)) || recommenders[0],

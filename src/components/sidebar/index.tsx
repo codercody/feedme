@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sidebar } from "flowbite-react";
+import { Sidebar as SB } from "flowbite-react";
 import { HiChartPie, HiHome } from "react-icons/hi2";
 
 import "@farcaster/auth-kit/styles.css";
@@ -12,34 +12,29 @@ import { Label, Select } from "flowbite-react";
 
 import { useAB } from "@/lib/contexts/ab";
 
-export default function () {
+export default function Sidebar() {
   const pathname = usePathname();
 
   const { recommenders, a, setA, b, setB } = useAB();
 
   return (
-    <Sidebar className="sm:fixed w-full sm:w-64 h-auto sm:h-full">
+    <SB className="sm:fixed w-full sm:w-64 h-auto sm:h-full">
       <div className="mb-4 text-2xl font-bold mx-2">feedme</div>
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item
-            as={Link}
-            href="/"
-            icon={HiHome}
-            active={pathname === "/"}
-          >
+      <SB.Items>
+        <SB.ItemGroup>
+          <SB.Item as={Link} href="/" icon={HiHome} active={pathname === "/"}>
             Home
-          </Sidebar.Item>
-          <Sidebar.Item
+          </SB.Item>
+          <SB.Item
             as={Link}
             href="/analytics"
             icon={HiChartPie}
             active={pathname === "/analytics"}
           >
             Analytics
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
+          </SB.Item>
+        </SB.ItemGroup>
+      </SB.Items>
       <div className="w-md mt-2">
         <div className="block">
           <Label htmlFor="a" value="First recommender" />
@@ -77,6 +72,6 @@ export default function () {
           <SignInButton />
         </div>
       </div>
-    </Sidebar>
+    </SB>
   );
 }

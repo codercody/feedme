@@ -21,8 +21,8 @@ export default function Accuracy() {
     <div>
       <h1 className="text-xl font-bold mb-2">Accuracy</h1>
       <p>
-        This measures how close the algorithm's predictions are to your true
-        preferences.
+        This measures how close the algorithm&apos;s predictions are to your
+        true preferences.
       </p>
       <NotSupported message="Accuracy metrics are not supported yet." />
       <div className="flex my-4">
