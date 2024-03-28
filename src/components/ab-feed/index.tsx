@@ -10,7 +10,7 @@ export default function ABFeed({
 }: {
   title: string;
   apiEndpoint: string;
-  options: string;
+  options?: string;
 }) {
   const { a, b } = useAB();
 
